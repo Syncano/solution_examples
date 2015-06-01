@@ -1,0 +1,55 @@
+{
+  "codeboxes": [                                                                                                                                                                                 
+    {                                                                                                                                                                                            
+      "name": "notify_slack",                                                                                                                                                                    
+      "id": 1,                                                                                                                                                                                   
+      "config": {},                                                                                                                                                                              
+      "runtime_name": "python",                                                                                                                                                                  
+      "source": "import json\r\nimport requests\r\n\r\nchannel = CONFIG.get('channel', '#testwebhooks')\r\nusername = CONFIG.get('username', 'webhook')\r\nhook_url = CONFIG.get('hook_url', 'https://hooks.slack.com/services/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')\r\n\r\nheaders = {'content-type': 'application/json'}\r\n\r\ndata = ARGS\r\n\r\nif data:\r\n amount = data['amount']\r\n item_type = data['item_type']\r\n \r\n message = \"New order was created: {amount} {item_type}\".format(amount=amount, item_type=item_type)\r\n payload = {\r\n \tu'channel': channel,\r\n \tu'username': username,\r\n \tu'text': message,\r\n }\r\n \r\n response = requests.post(hook_url, data=json.dumps(payload), headers=headers, timeout=5)\r\n print(response.status_code, response.content)",
+      "updated_at": "2015-06-01T11:43:44.860390Z",                                                                                                                                               
+      "created_at": "2015-06-01T07:54:15.841159Z",                                                                                                                                               
+      "description": ""
+    }                                                                                                                                                                                            
+  ],                                                                                                                                                                                             
+  "webhooks": [],                                                                                                                                                                                
+  "schedules": [],
+  "groups": [],
+  "classes": [
+    {
+      "schema": [
+        {
+          "name": "item_type",
+          "type": "string"
+        },
+        {
+          "name": "amount",
+          "type": "integer"
+        }
+      ],
+      "other_permissions": "none",
+      "revision": 1,
+      "metadata": {},
+      "status": "ready",
+      "group": null,
+      "name": "order",
+      "group_permissions": "none",
+      "created_at": "2015-06-01T10:23:43.289737Z",
+      "description": "",
+      "updated_at": "2015-06-01T10:23:43.289776Z",
+      "objects_count": 7
+    }
+  ],
+  "channels": [],
+  "triggers": [
+    {
+      "signal": "post_create",
+      "class": "order",
+      "id": 1,
+      "updated_at": "2015-06-01T10:24:03.161670Z",
+      "created_at": "2015-06-01T10:24:03.161618Z",
+      "name": "notify_about_order",
+      "codebox": 1
+    }
+  ],
+  "users": []
+}
