@@ -1,0 +1,60 @@
+{
+  "codeboxes": [                                                                                                                                                                                 
+    {                                                                                                                                                                                            
+      "id": 1,                                                                                                                                                                                   
+      "config": {},                                                                                                                                                                              
+      "runtime_name": "python",                                                                                                                                                                  
+      "source": "import datetime\n\nimport syncano\nfrom syncano.models.base import Object\n\nconfig = {\n    \"class_name\": \"archivable\",\n    \"instance_name\": \"archiving_solution\",\n    \"time_unit\": \"minutes\",\n    \"interval\": 2,\n    \"api_key\": \"YOUR_API_KEY\"\n}\n\n# default values would be updated from codebox CONFIG\nconfig.update(CONFIG)\n\n# Make connection to Syncano\nsyncano.connect(api_key=config[\"api_key\"])\n\nnow = datetime.datetime.now()\ndate_to_archive = now - datetime.timedelta(**{config['time_unit']: config['interval']})\n\nobjects = Object.please.list(\n    class_name=config[\"class_name\"],\n    instance_name=config[\"instance_name\"]\n).filter(deleted=True, updated_at__lte=date_to_archive)\n\nprint 'Archiving objects of class %s' % config[\"class_name\"]\n\ndeleted = 0\nfor o in objects:\n    o.delete()\n    deleted += 1\n\nprint 'Removed %s objects, done!' % deleted",
+      "label": "archiver",                                                                                                                                                                       
+      "updated_at": "2015-07-03T12:44:26.783493Z",                                                                                                                                               
+      "created_at": "2015-07-03T09:35:16.325273Z",                                                                                                                                               
+      "description": ""
+    }                                                                                                                                                                                            
+  ],                                                                                                                                                                                             
+  "webhooks": [],                                                                                                                                                                                
+  "schedules": [                                                                                                                                                                                 
+    {                                                                                                                                                                                            
+      "id": 1,                                                                                                                                                                                   
+      "label": "archiver schedule",                                                                                                                                                              
+      "crontab": null,                                                                                                                                                                           
+      "interval_sec": 60,
+      "created_at": "2015-07-03T12:26:45.637160Z",
+      "scheduled_next": "2015-07-03T12:50:12.108547Z",
+      "description": "",
+      "codebox": 1
+    }
+  ],
+  "groups": [],
+  "classes": [
+    {
+      "schema": [
+        {
+          "name": "title",
+          "type": "string",
+          "filter_index": true,
+          "order_index": true
+        },
+        {
+          "name": "deleted",
+          "type": "boolean",
+          "filter_index": true,
+          "order_index": true
+        }
+      ],
+      "other_permissions": "none",
+      "revision": 2,
+      "metadata": null,
+      "status": "ready",
+      "group": null,
+      "name": "archivable",
+      "group_permissions": "none",
+      "created_at": "2015-07-03T09:19:06.062458Z",
+      "description": "",
+      "updated_at": "2015-07-03T11:12:28.650508Z",
+      "objects_count": 10
+    }
+  ],
+  "channels": [],
+  "triggers": [],
+  "users": []
+}
